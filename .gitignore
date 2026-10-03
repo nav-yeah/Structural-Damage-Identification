@@ -4,3 +4,6 @@ results/*.npz
 __pycache__/
 .venv/
 .ipynb_checkpoints/
+samples/
+results/*.pt
+results/*.npz
