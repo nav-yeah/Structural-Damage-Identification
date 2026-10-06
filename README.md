@@ -59,8 +59,6 @@ AdamW, cross-entropy loss, batch size 32. The checkpoint with the best validatio
 
 ## 4. Work Division
 
-Both members own 3 models of matching total complexity (one simple, one medium, one heavy each), plus a share of the supporting code.
-
 | Area | Dhruva Myakeri | Navya Suresh |
 |---|---|---|
 | Simple model | kNN | Logistic Regression |
@@ -69,7 +67,7 @@ Both members own 3 models of matching total complexity (one simple, one medium, 
 | Supporting code | `src/data.py` (loading, split, preprocessing), `src/demo.py` (CLI demo), `src/export_samples.py` | `src/gradcam.py` (Grad-CAM + error analysis), `src/app.py` (Gradio UI), `src/plots.py` (curves + results table) |
 | Analysis & report | Results and discussion for Models 1–3 | Results and discussion for Models 4–6 |
 
-Both members contribute to the final report and presentation.
+
 
 ## 5. Setup
 
@@ -179,7 +177,13 @@ Full table: `results/results_table.md` / `results/results_table.csv`.
 - **Best overall:** EfficientNet-B0 has the highest test accuracy (0.879) and the most balanced class recalls.
 - **Safety trade-off:** ResNet50 has the highest Damaged recall (0.914), meaning fewer missed damaged structures, at the cost of lower Undamaged recall (0.835).
 - **Classical bias:** all three classical models favour the Damaged class (Damaged recall 0.71–0.77 vs Undamaged 0.40–0.48).
-- **Limitations / future work:** `[add: limits of the thumbnail features, dataset bias, stronger augmentation, larger backbones, multi-class damage types]`
+- **Limitations and future work:**
+  - **Thumbnail features:** classical models see only 28×28×3 averaged pixels, which removes the fine cracks and spalling that indicate damage. This is the main reason they top out at 56–63%. HOG or texture features, or CNN embeddings fed to an SVM, would be a fairer classical baseline.
+  - **Dataset:** a single binary benchmark (PHI-Net Task 2) with 11,811 training images, so results may not transfer to other structure types, materials, lighting or camera conditions. We did not test on external images beyond the demo.
+  - **Class balance and error cost:** the training set leans towards Damaged (6,282 vs 5,529). The CNNs trade Damaged recall against Undamaged recall (e.g., ResNet50 0.914 vs 0.835). Class-weighted loss or threshold tuning could favour Damaged recall, since missing real damage is the costlier error.
+  - **Augmentation:** only horizontal flips were used. Colour jitter, small crops, blur and rotation could improve robustness, but each needs checking so it doesn't distort damage cues.
+  - **Model capacity and training:** all CNNs were trained for only 10 epochs from a single run, so differences of about 1% (e.g., EfficientNet-B0 0.879 vs ResNet50 0.875) may be within run-to-run noise. Multiple seeds and larger backbones (e.g., ConvNeXt, ViT) are future work.
+  - **Damage types:** the task is binary. Extending to multi-class damage (crack, spalling, exposed rebar, severity levels) or localising damage with segmentation would be more useful for real inspections.
 
 ## 10. Tech Stack
 
