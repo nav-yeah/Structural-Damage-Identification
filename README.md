@@ -29,14 +29,12 @@ Manual inspection of buildings and bridges is slow, costly and subjective. This 
 ## 2. Dataset
 
 - **Source:** PEER Hub ImageNet (PHI-Net), **Task 2 – Damage State** (binary)
+- **Official training set:** 11,811 images (6,282 Damaged / 5,529 Undamaged)
 - **Official test set:** 1,460 images (745 Damaged / 715 Undamaged)
-- **Training set:** official training set, `[N]` images
-- **Train/val split:** stratified 90/10 split of the official training set, `seed=42`
+- **Train/val split:** stratified 90/10 split of the official training set, `seed=42` → 10,629 train / 1,182 validation
 - **Storage format:** float32 arrays, BGR, ImageNet channel-mean subtracted (Keras "caffe" preprocessing); `to_rgb01()` in `src/data.py` converts back to RGB in [0, 1]
 - **Augmentation (CNNs, train only):** horizontal flip only (chosen as damage-safe)
 - **Test discipline:** hyperparameters and best epoch are chosen on validation only; the test set is scored once per model
-
-> The dataset is not in the repo (the training array is ~7 GB). Download it and place it as shown in [Setup](#5-setup).
 
 ## 3. Models
 
